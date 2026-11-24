@@ -1,0 +1,20 @@
+{
+  "name": "image-joiner",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc && tsc -p src && tsc -p test"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  }
+}

@@ -1,0 +1,57 @@
+# main に push されたら、型チェックとテストをしてから、画面をビルドして GitHub Pages に公開する
+name: 公開
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Actions の画面から手で実行もできるようにする
+
+# 全体の権限は読むだけにする。公開に要る権限は、公開するジョブ（deploy）にだけ与える
+permissions:
+  contents: read
+
+# 公開が重なったら、新しいほうを待たせる（途中の公開を止めない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # リポジトリの中身を取り出す。版はタグではなくコミットの ID で固定する（タグは後から付け替えられるため）
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      # Vite のビルドは型を確かめないので、先に型チェックをする。型チェックかテストに失敗したらここで止まり、公開しない
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+      # ビルドしてできた dist フォルダを、公開用にまとめて渡す
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # pages と id-token は Pages に公開するために要る
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

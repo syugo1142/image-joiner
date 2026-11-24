@@ -1,0 +1,518 @@
+/* 紺色ベースに白い文字の、ポップなテーマ。色は黄・ピンク・ミントの3色を、役割を決めて使う */
+:root {
+  /* ブラウザの入力欄やスクロールバーも暗い色で表示させる */
+  color-scheme: dark;
+  /* 文字と背景のコントラスト比は、どの組み合わせも 4.5 以上にしている */
+  --bg: #0e1a3d; /* ページの背景 */
+  --dot: #1a2a5c; /* 背景の水玉 */
+  --card: #16285c; /* カード */
+  --line: #2f4a9a; /* カードの枠 */
+  --tile: #1f3673; /* 一覧の行 */
+  --field: #2b4790; /* 入力欄・ボタン。まわりより明るくする */
+  --field-border: #7088d0; /* 入力欄の枠 */
+  --shadow: #060c22; /* カードの、ずらした影 */
+  --text: #ffffff;
+  --muted: #c5d1f2; /* 説明などの薄い文字 */
+  --yellow: #ffd23f; /* いちばん目立たせたいもの（保存ボタン・番号・選んでいる項目） */
+  --pink: #ff7eb3; /* フォーカスの枠・ドラッグ中の目印・保存ボタンの影 */
+  --mint: #4fe0c3; /* 画像を落とす枠・仕上がりの大きさ・リンク */
+  --on-color: #0e1a3d; /* 黄色の上に載せる文字 */
+  --radius: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 下で display を指定した要素でも、hidden を付けたら必ず隠す */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  /* Windows の游ゴシックは線が細く薄く見えるので、メイリオを先にする（Mac などはヒラギノ） */
+  font-family: "Meiryo", "Hiragino Sans", system-ui, sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  background-color: var(--bg);
+  /* 水玉の模様。小さな丸を 24px ごとに並べる */
+  background-image: radial-gradient(var(--dot) 2px, transparent 2px);
+  background-size: 24px 24px;
+}
+
+a {
+  color: var(--mint);
+}
+
+/* キーボードで操作しているときのフォーカスの枠。消さずに、目立つ色にする */
+:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 2px;
+}
+
+/* 見た目からは隠すが、キーボードの操作や読み上げでは使えるようにする */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- ヘッダー・フッター ---------- */
+.app-header {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 24px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* タイトルの下に、黄・ピンク・ミントの3色の線を引く */
+.app-header h1::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 8px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, var(--yellow) 0 33.3%, var(--pink) 33.3% 66.6%, var(--mint) 66.6%);
+}
+
+.lead {
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+.app-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.app-footer p {
+  margin: 4px 0;
+}
+
+/* ---------- 全体の並び ---------- */
+/* スマホでは1列。広い画面では、左に「選ぶ・設定」、右に「プレビュー」の2列にする */
+.layout {
+  display: grid;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+}
+
+.column {
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+
+@media (min-width: 880px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  /* 一覧や設定をスクロールしても、プレビューが画面に残るようにする */
+  .preview-card {
+    position: sticky;
+    top: 16px;
+  }
+}
+
+/* ---------- カード ---------- */
+/* 太い枠と、ずらした影で、シールを貼ったような見た目にする */
+.card {
+  padding: 16px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow);
+}
+
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+}
+
+/* 見出しの番号。黄色の四角に紺の数字 */
+.step {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--yellow);
+  color: var(--on-color);
+  font-weight: 800;
+}
+
+.hint {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- ボタン ---------- */
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.small-button {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.small-button:hover:not(:disabled) {
+  border-color: var(--mint);
+}
+
+.small-button:disabled {
+  opacity: 0.4;
+}
+
+.text-button {
+  margin-top: 12px;
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: var(--mint);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* 保存ボタン。黄色に、ピンクのずらした影。押すと影の方へ沈む */
+.primary-button {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 16px;
+  border: 2px solid var(--on-color);
+  border-radius: var(--radius);
+  background: var(--yellow);
+  color: var(--on-color);
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 var(--pink);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.primary-button:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--pink);
+}
+
+.primary-button:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--pink);
+}
+
+.primary-button:disabled {
+  border-color: transparent;
+  background: var(--field);
+  color: var(--muted);
+  box-shadow: none;
+}
+
+/* 動きを減らす設定にしている人には、ボタンを動かさない */
+@media (prefers-reduced-motion: reduce) {
+  .primary-button {
+    transition: none;
+  }
+
+  .primary-button:hover:not(:disabled),
+  .primary-button:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ---------- 1. 画像を選ぶ ---------- */
+.drop-zone {
+  display: grid;
+  gap: 4px;
+  place-items: center;
+  padding: 28px 16px;
+  border: 3px dashed var(--mint);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+}
+
+/* マウスを載せたときと、ファイルをドラッグしているときは、ピンクにして「ここに落とせる」と示す */
+.drop-zone:hover,
+.drop-zone.is-dragging {
+  border-style: solid;
+  border-color: var(--pink);
+  background: var(--tile);
+}
+
+/* 中の見えないファイル選択の欄に、キーボードでフォーカスが来たら、枠ごと目立たせる */
+.drop-zone:has(:focus-visible) {
+  outline: 3px solid var(--pink);
+  outline-offset: 2px;
+}
+
+.drop-main {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.drop-sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.message {
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+.message:empty {
+  margin: 0;
+}
+
+/* 一覧。番号は CSS の counter で数え、黄色の小さな四角で示す */
+.image-list {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: image;
+}
+
+.image-list:empty {
+  margin: 0;
+}
+
+.image-item {
+  display: grid;
+  grid-template-columns: auto 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--tile);
+  counter-increment: image;
+}
+
+.image-item::before {
+  content: counter(image);
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--yellow);
+  color: var(--on-color);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  background: var(--bg);
+  object-fit: contain;
+}
+
+.image-body {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* 長いファイル名は、はみ出さずに「…」で切る（全部は title で見られる） */
+.image-name {
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 狭い画面では、大きさの下にボタンが回り込む */
+.image-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+}
+
+.image-size {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.image-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+/* ---------- 2. つなげ方を決める ---------- */
+.settings {
+  display: grid;
+  gap: 20px;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend,
+.field label {
+  margin-bottom: 8px;
+  padding: 0;
+  font-weight: 700;
+}
+
+/* 選択肢は2つずつなので、どの画面の幅でも、同じ幅で横に2つ並べる */
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* ラジオボタンの選択肢。選んでいるものは黄色にする（丸の印も残すので、色だけで伝えることにはならない） */
+.choice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: var(--field);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.choice:hover {
+  border-color: var(--mint);
+}
+
+.choice input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--yellow);
+}
+
+.choice:has(input:checked) {
+  background: var(--yellow);
+  color: var(--on-color);
+}
+
+.choice:has(input:checked) input {
+  accent-color: var(--on-color);
+}
+
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+}
+
+.field {
+  display: grid;
+  justify-items: start;
+}
+
+.field input {
+  min-height: 44px;
+  border: 2px solid var(--field-border);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+}
+
+.field input[type="number"] {
+  width: 8em;
+  padding: 0 12px;
+}
+
+.field input[type="color"] {
+  width: 72px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+/* ---------- 3. 仕上がりを保存する ---------- */
+.preview-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.preview-frame {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+/* 縦横の比を保ったまま、枠の幅と画面の高さの 60% に収まるように縮めて見せる（保存するのは元の大きさ） */
+.preview {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  margin: 0 auto;
+}
+
+.output-size {
+  margin: 12px 0 0;
+  color: var(--mint);
+  font-weight: 700;
+}
+
+.output-size:empty {
+  margin: 0;
+}
+
+.save-message {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.save-message:empty {
+  margin: 0;
+}

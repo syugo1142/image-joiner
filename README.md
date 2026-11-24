@@ -1,0 +1,35 @@
+# Image Joiner
+
+複数の画像を縦や横につなげて、1枚の画像にするWebアプリです。ブラウザで開いて使います。
+
+![画面の例](docs/screenshot.png)
+
+## 機能
+- 画像をクリックして選ぶか、ドラッグ＆ドロップで追加する（何枚でも）
+- 画像の順番を入れ替える
+- 縦か横につなげる。大きさは、いちばん小さい画像に合わせてそろえるか、元のままにする
+- 画像どうしのすき間と、背景の色を決める
+- 仕上がりを確かめて、PNGかJPEGで保存する
+
+## 使い方
+https://syugo1142.github.io/image-joiner/ を開きます。
+
+- 画像はブラウザの中だけで処理し、サーバーには送信しません
+- つなげ方の設定（向き・すき間など）は、ブラウザのlocalStorageに保存します。画像は保存しません
+- つなげた画像は、縦・横それぞれ32,767pxまで、面積は16,384 × 16,384pxまで作れます。スマートフォンでは、端末によってこれより小さい大きさまでしか作れないことがあります
+
+## 使用技術
+- フロントエンド: TypeScript、[Vite](https://vite.dev/)、Canvas API（画像の描画）、node:test（配置の計算のテスト）
+- インフラ・CI/CD: GitHub Pages（ホスティング）、GitHub Actions（型チェック・テスト・デプロイ）
+
+## 開発
+Node.js 24 以降が必要です。
+```
+npm ci            # 必要な部品（Vite、TypeScript）を入れる
+npm run dev       # 開発用サーバーを起動する（http://localhost:5173/）
+npm run build     # デプロイするファイルを dist/ に作る
+npm run preview   # 作った dist/ を手元で開く（http://localhost:4173/）
+npm run typecheck # 型の間違いがないか確かめる
+npm test          # 配置の計算と設定の読み込みを自動でテストする（test/）
+```
+main に push すると、GitHub Actions が型チェックとテストを行い、ビルドして GitHub Pages にデプロイします。
