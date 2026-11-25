@@ -17,7 +17,6 @@
   --pink: #ff7eb3; /* フォーカスの枠・ドラッグ中の目印・保存ボタンの影 */
   --mint: #4fe0c3; /* 画像を落とす枠・仕上がりの大きさ・リンク */
   --on-color: #0e1a3d; /* 黄色の上に載せる文字 */
-  --radius: 10px;
 }
 
 *,
@@ -138,12 +137,11 @@ a {
 }
 
 /* ---------- カード ---------- */
-/* 太い枠と、ずらした影で、シールを貼ったような見た目にする */
+/* 太い枠と、ずらした影で、シールを貼ったような見た目にする。角は丸めない（どの部品も同じ） */
 .card {
   padding: 16px;
   background: var(--card);
   border: 2px solid var(--line);
-  border-radius: var(--radius);
   box-shadow: 6px 6px 0 var(--shadow);
 }
 
@@ -161,7 +159,6 @@ a {
   place-items: center;
   width: 32px;
   height: 32px;
-  border-radius: 6px;
   background: var(--yellow);
   color: var(--on-color);
   font-weight: 800;
@@ -174,6 +171,12 @@ a {
 }
 
 /* ---------- ボタン ---------- */
+/* iPhone の Safari は、ボタンや入力欄の角を最初から丸くするので、四角に戻す */
+button,
+.field input {
+  border-radius: 0;
+}
+
 button {
   font: inherit;
   cursor: pointer;
@@ -188,7 +191,6 @@ button:disabled {
   min-height: 40px;
   padding: 0 10px;
   border: 2px solid transparent;
-  border-radius: 8px;
   background: var(--field);
   color: var(--text);
   font-weight: 700;
@@ -219,7 +221,6 @@ button:disabled {
   min-height: 52px;
   margin-top: 16px;
   border: 2px solid var(--on-color);
-  border-radius: var(--radius);
   background: var(--yellow);
   color: var(--on-color);
   font-size: 1.1rem;
@@ -264,7 +265,6 @@ button:disabled {
   place-items: center;
   padding: 28px 16px;
   border: 3px dashed var(--mint);
-  border-radius: var(--radius);
   text-align: center;
   cursor: pointer;
 }
@@ -322,7 +322,6 @@ button:disabled {
   align-items: center;
   gap: 10px;
   padding: 8px;
-  border-radius: 8px;
   background: var(--tile);
   counter-increment: image;
 }
@@ -334,7 +333,6 @@ button:disabled {
   min-width: 24px;
   height: 24px;
   padding: 0 4px;
-  border-radius: 4px;
   background: var(--yellow);
   color: var(--on-color);
   font-size: 0.8rem;
@@ -344,7 +342,6 @@ button:disabled {
 .thumb {
   width: 56px;
   height: 56px;
-  border-radius: 4px;
   background: var(--bg);
   object-fit: contain;
 }
@@ -418,7 +415,6 @@ legend,
   min-height: 44px;
   padding: 0 8px;
   border: 2px solid transparent;
-  border-radius: 8px;
   background: var(--field);
   font-size: 0.95rem;
   font-weight: 700;
@@ -459,7 +455,6 @@ legend,
 .field input {
   min-height: 44px;
   border: 2px solid var(--field-border);
-  border-radius: 8px;
   background: var(--field);
   color: var(--text);
   font: inherit;
@@ -484,7 +479,6 @@ legend,
 
 .preview-frame {
   padding: 12px;
-  border-radius: 8px;
   background: var(--bg);
 }
 
