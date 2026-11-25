@@ -10,7 +10,7 @@ import { byId, formatNumber } from './util.ts';
 
 type App = {
   images: JoinImage[]; // 選んだ画像（並べた順）
-  settings: Settings; // つなげ方の設定
+  settings: Settings; // 結合方法の設定
   previewReady: boolean; // プレビューが描けていて、保存できる状態か
   dom: AppElements;
 };
@@ -19,7 +19,7 @@ type App = {
 type AppElements = ReturnType<typeof findElements>;
 
 // 大きすぎて作れないときに、どうすればよいかを添える文
-const TOO_LARGE_HINT = '画像の数を減らすか、大きさを「そろえる」にしてみてください。';
+const TOO_LARGE_HINT = '画像の数を減らすか、画像のサイズを「そろえる」にしてみてください。';
 
 export function initApp(): void {
   const app: App = {
@@ -139,24 +139,24 @@ function update(app: App): void {
 
 function renderPreview(app: App): void {
   if (app.images.length === 0) {
-    showPreviewNote(app, '画像を選ぶと、ここに仕上がりが表示されます。');
+    showPreviewNote(app, '画像を選ぶと、ここにプレビューが表示されます。');
     return;
   }
 
   const layout = calculateLayout(app.images, app.settings);
   const sizeText = `${formatNumber(layout.width)} × ${formatNumber(layout.height)} px`;
   if (isTooLarge(layout.width, layout.height)) {
-    showPreviewNote(app, `仕上がりが ${sizeText} になり、大きすぎて作れません。${TOO_LARGE_HINT}`);
+    showPreviewNote(app, `結合後のサイズが ${sizeText} になり、大きすぎて作れません。${TOO_LARGE_HINT}`);
     return;
   }
   if (!drawJoinedImage(app.dom.canvas, app.images, layout, app.settings.background)) {
-    showPreviewNote(app, `仕上がりが ${sizeText} になり、この端末では大きすぎて作れません。${TOO_LARGE_HINT}`);
+    showPreviewNote(app, `結合後のサイズが ${sizeText} になり、この端末では大きすぎて作れません。${TOO_LARGE_HINT}`);
     return;
   }
 
   app.dom.previewNote.hidden = true;
   app.dom.previewFrame.hidden = false;
-  app.dom.outputSize.textContent = `仕上がりの大きさ: ${sizeText}`;
+  app.dom.outputSize.textContent = `結合後のサイズ: ${sizeText}`;
   app.dom.downloadButton.disabled = false;
   app.previewReady = true;
 }

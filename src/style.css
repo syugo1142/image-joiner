@@ -1,22 +1,20 @@
-/* 紺色ベースに白い文字の、ポップなテーマ。色は黄・ピンク・ミントの3色を、役割を決めて使う */
+/* 白ベースのシンプルなテーマ。色は白・黒・灰色を土台にし、目立たせる色は青の1色だけにする。
+   段は細い灰色の枠で囲み、角は丸めず、影も付けない */
 :root {
-  /* ブラウザの入力欄やスクロールバーも暗い色で表示させる */
-  color-scheme: dark;
-  /* 文字と背景のコントラスト比は、どの組み合わせも 4.5 以上にしている */
-  --bg: #0e1a3d; /* ページの背景 */
-  --dot: #1a2a5c; /* 背景の水玉 */
-  --card: #16285c; /* カード */
-  --line: #2f4a9a; /* カードの枠 */
-  --tile: #1f3673; /* 一覧の行 */
-  --field: #2b4790; /* 入力欄・ボタン。まわりより明るくする */
-  --field-border: #7088d0; /* 入力欄の枠 */
-  --shadow: #060c22; /* カードの、ずらした影 */
-  --text: #ffffff;
-  --muted: #c5d1f2; /* 説明などの薄い文字 */
-  --yellow: #ffd23f; /* いちばん目立たせたいもの（保存ボタン・番号・選んでいる項目） */
-  --pink: #ff7eb3; /* フォーカスの枠・ドラッグ中の目印・保存ボタンの影 */
-  --mint: #4fe0c3; /* 画像を落とす枠・仕上がりの大きさ・リンク */
-  --on-color: #0e1a3d; /* 黄色の上に載せる文字 */
+  /* ブラウザの入力欄やスクロールバーも明るい色で表示させる */
+  color-scheme: light;
+  /* 文字と背景のコントラスト比は 4.5 以上、入力欄・ボタン・選択肢の枠は 3 以上にしている。色を変えたら計算し直す */
+  --bg: #ffffff; /* ページ・カード・入力欄の背景 */
+  --text: #1a1a1a;
+  --muted: #5c5c5c; /* 説明などの薄い文字 */
+  --line: #d9d9d9; /* カードの枠・一覧の区切りの線 */
+  --control-border: #767676; /* 入力欄・ボタン・選択肢・画像を落とす枠 */
+  --accent: #0a58ca; /* 青。保存ボタン・選んでいる選択肢・リンク・フォーカスの枠・見出しの番号にだけ使う */
+  --accent-hover: #0847a3; /* 保存ボタンにマウスを載せたときの青 */
+  --on-accent: #ffffff; /* 青の上に載せる文字 */
+  --hover-bg: #f2f5fa; /* ボタン・選択肢・画像を落とす枠にマウスを載せたとき */
+  --sunken: #f2f2f2; /* プレビューと一覧の小さな画像の下地（白い画像でも、どこまでが画像か分かるように） */
+  --disabled-bg: #e6e6e6; /* 押せないときの保存ボタン */
 }
 
 *,
@@ -34,21 +32,23 @@ body {
   margin: 0;
   /* Windows の游ゴシックは線が細く薄く見えるので、メイリオを先にする（Mac などはヒラギノ） */
   font-family: "Meiryo", "Hiragino Sans", system-ui, sans-serif;
+  font-size: 16px;
+  /* 行の高さは文字の 1.7 倍（デジタル庁のデザインシステムの「本文は文字の 150% 以上」を満たす） */
+  line-height: 1.7;
+  /* 日本語の文を、文節の切れ目で折り返す（「合わ / せて」のように言葉の途中で切れないように）。
+     対応しているのは Chrome・Edge で、ほかのブラウザでは今までどおりに折り返す */
+  word-break: auto-phrase;
   color: var(--text);
-  line-height: 1.6;
-  background-color: var(--bg);
-  /* 水玉の模様。小さな丸を 24px ごとに並べる */
-  background-image: radial-gradient(var(--dot) 2px, transparent 2px);
-  background-size: 24px 24px;
+  background: var(--bg);
 }
 
 a {
-  color: var(--mint);
+  color: var(--accent);
 }
 
-/* キーボードで操作しているときのフォーカスの枠。消さずに、目立つ色にする */
+/* キーボードで操作しているときのフォーカスの枠。消さずに、青ではっきり示す */
 :focus-visible {
-  outline: 3px solid var(--pink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -69,29 +69,18 @@ a {
 .app-header {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 32px 16px 24px;
+  padding: 40px 16px 28px;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: clamp(2rem, 7vw, 3rem);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-}
-
-/* タイトルの下に、黄・ピンク・ミントの3色の線を引く */
-.app-header h1::after {
-  content: "";
-  display: block;
-  width: 120px;
-  height: 8px;
-  margin-top: 12px;
-  background: linear-gradient(90deg, var(--yellow) 0 33.3%, var(--pink) 33.3% 66.6%, var(--mint) 66.6%);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .lead {
-  margin: 12px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
 }
 
@@ -100,7 +89,7 @@ a {
   margin: 0 auto;
   padding: 0 16px 40px;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .app-footer p {
@@ -111,21 +100,22 @@ a {
 /* スマホでは1列。広い画面では、左に「選ぶ・設定」、右に「プレビュー」の2列にする */
 .layout {
   display: grid;
-  gap: 24px;
+  gap: 32px;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 16px 32px;
+  padding: 0 16px 40px;
 }
 
 .column {
   display: grid;
-  gap: 24px;
+  gap: 32px;
   align-content: start;
 }
 
 @media (min-width: 880px) {
   .layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
     align-items: start;
   }
 
@@ -137,37 +127,30 @@ a {
 }
 
 /* ---------- カード ---------- */
-/* 太い枠と、ずらした影で、シールを貼ったような見た目にする。角は丸めない（どの部品も同じ） */
+/* 3つの段を、細い灰色の枠で囲む。角は丸めず、影も付けない（どの部品も同じ） */
 .card {
-  padding: 16px;
-  background: var(--card);
-  border: 2px solid var(--line);
-  box-shadow: 6px 6px 0 var(--shadow);
+  padding: 20px;
+  border: 1px solid var(--line);
 }
 
 .card h2 {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   margin: 0 0 16px;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 
-/* 見出しの番号。黄色の四角に紺の数字 */
+/* 見出しの番号。青い数字だけで示す */
 .step {
-  display: inline-grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  background: var(--yellow);
-  color: var(--on-color);
-  font-weight: 800;
+  color: var(--accent);
 }
 
 .hint {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 /* ---------- ボタン ---------- */
@@ -190,107 +173,84 @@ button:disabled {
   min-width: 40px;
   min-height: 40px;
   padding: 0 10px;
-  border: 2px solid transparent;
-  background: var(--field);
+  border: 1px solid var(--control-border);
+  background: var(--bg);
   color: var(--text);
-  font-weight: 700;
 }
 
 .small-button:hover:not(:disabled) {
-  border-color: var(--mint);
+  background: var(--hover-bg);
 }
 
+/* 押せないボタンは薄くする（押せないボタンは、コントラスト比の決まりの対象外） */
 .small-button:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .text-button {
   margin-top: 12px;
-  padding: 8px 4px;
+  padding: 8px 0;
   border: 0;
   background: none;
-  color: var(--mint);
-  font-weight: 700;
+  color: var(--accent);
   text-decoration: underline;
 }
 
-/* 保存ボタン。黄色に、ピンクのずらした影。押すと影の方へ沈む */
+/* 保存ボタン。いちばん押してほしいボタンなので、青く塗る */
 .primary-button {
   display: block;
   width: 100%;
-  min-height: 52px;
+  min-height: 48px;
   margin-top: 16px;
-  border: 2px solid var(--on-color);
-  background: var(--yellow);
-  color: var(--on-color);
-  font-size: 1.1rem;
-  font-weight: 800;
-  box-shadow: 4px 4px 0 var(--pink);
-  transition: transform 0.1s, box-shadow 0.1s;
+  border: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .primary-button:hover:not(:disabled) {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--pink);
-}
-
-.primary-button:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--pink);
+  background: var(--accent-hover);
 }
 
 .primary-button:disabled {
-  border-color: transparent;
-  background: var(--field);
+  background: var(--disabled-bg);
   color: var(--muted);
-  box-shadow: none;
-}
-
-/* 動きを減らす設定にしている人には、ボタンを動かさない */
-@media (prefers-reduced-motion: reduce) {
-  .primary-button {
-    transition: none;
-  }
-
-  .primary-button:hover:not(:disabled),
-  .primary-button:active:not(:disabled) {
-    transform: none;
-  }
 }
 
 /* ---------- 1. 画像を選ぶ ---------- */
 .drop-zone {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   place-items: center;
-  padding: 28px 16px;
-  border: 3px dashed var(--mint);
+  padding: 32px 16px;
+  border: 1px dashed var(--control-border);
+  background: var(--bg);
   text-align: center;
   cursor: pointer;
 }
 
-/* マウスを載せたときと、ファイルをドラッグしているときは、ピンクにして「ここに落とせる」と示す */
+/* マウスを載せたときと、ファイルをドラッグしているときは、青い実線にして「ここに落とせる」と示す */
 .drop-zone:hover,
 .drop-zone.is-dragging {
   border-style: solid;
-  border-color: var(--pink);
-  background: var(--tile);
+  border-color: var(--accent);
+  background: var(--hover-bg);
 }
 
 /* 中の見えないファイル選択の欄に、キーボードでフォーカスが来たら、枠ごと目立たせる */
 .drop-zone:has(:focus-visible) {
-  outline: 3px solid var(--pink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 .drop-main {
-  font-size: 1.15rem;
   font-weight: 700;
 }
 
 .drop-sub {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .message {
@@ -302,53 +262,48 @@ button:disabled {
   margin: 0;
 }
 
-/* 一覧。番号は CSS の counter で数え、黄色の小さな四角で示す */
+/* 一覧。色の付いた箱を並べずに、線で区切る（箱の中に箱を作らない）。番号は CSS の counter で数える */
 .image-list {
-  display: grid;
-  gap: 8px;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   padding: 0;
   list-style: none;
   counter-reset: image;
+  border-top: 1px solid var(--line);
 }
 
 .image-list:empty {
   margin: 0;
+  border-top: 0;
 }
 
 .image-item {
   display: grid;
   grid-template-columns: auto 56px minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  background: var(--tile);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
   counter-increment: image;
 }
 
 .image-item::before {
   content: counter(image);
-  display: grid;
-  place-items: center;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 4px;
-  background: var(--yellow);
-  color: var(--on-color);
-  font-size: 0.8rem;
-  font-weight: 800;
+  min-width: 1.25em;
+  color: var(--muted);
+  font-weight: 700;
+  text-align: right;
 }
 
 .thumb {
   width: 56px;
   height: 56px;
-  background: var(--bg);
+  background: var(--sunken);
   object-fit: contain;
 }
 
 .image-body {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
 }
 
@@ -371,7 +326,7 @@ button:disabled {
 
 .image-size {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
 }
 
 .image-buttons {
@@ -382,7 +337,7 @@ button:disabled {
 /* ---------- 2. つなげ方を決める ---------- */
 .settings {
   display: grid;
-  gap: 20px;
+  gap: 24px;
 }
 
 fieldset {
@@ -406,45 +361,45 @@ legend,
   gap: 8px;
 }
 
-/* ラジオボタンの選択肢。選んでいるものは黄色にする（丸の印も残すので、色だけで伝えることにはならない） */
 .choice {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   min-height: 44px;
   padding: 0 8px;
-  border: 2px solid transparent;
-  background: var(--field);
-  font-size: 0.95rem;
-  font-weight: 700;
+  border: 1px solid var(--control-border);
+  background: var(--bg);
   cursor: pointer;
 }
 
 .choice:hover {
-  border-color: var(--mint);
+  background: var(--hover-bg);
 }
 
 .choice input {
   width: 18px;
   height: 18px;
   margin: 0;
-  accent-color: var(--yellow);
+  accent-color: var(--accent);
 }
 
+/* 選んでいる選択肢は青く塗る（丸の印も残すので、色だけで伝えることにはならない） */
 .choice:has(input:checked) {
-  background: var(--yellow);
-  color: var(--on-color);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
 }
 
 .choice:has(input:checked) input {
-  accent-color: var(--on-color);
+  accent-color: var(--on-accent);
 }
 
 .field-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px 32px;
+  gap: 24px 32px;
 }
 
 .field {
@@ -454,8 +409,8 @@ legend,
 
 .field input {
   min-height: 44px;
-  border: 2px solid var(--field-border);
-  background: var(--field);
+  border: 1px solid var(--control-border);
+  background: var(--bg);
   color: var(--text);
   font: inherit;
 }
@@ -477,9 +432,10 @@ legend,
   color: var(--muted);
 }
 
+/* プレビューの下地は薄い灰色にして、白い画像でも、どこまでが仕上がりか分かるようにする */
 .preview-frame {
-  padding: 12px;
-  background: var(--bg);
+  padding: 16px;
+  background: var(--sunken);
 }
 
 /* 縦横の比を保ったまま、枠の幅と画面の高さの 60% に収まるように縮めて見せる（保存するのは元の大きさ） */
@@ -492,7 +448,6 @@ legend,
 
 .output-size {
   margin: 12px 0 0;
-  color: var(--mint);
   font-weight: 700;
 }
 
@@ -503,7 +458,7 @@ legend,
 .save-message {
   margin: 12px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   overflow-wrap: anywhere;
 }
 

@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="複数の画像を縦や横につなげて、1枚の画像にするWebアプリです。画像はブラウザの中だけで処理します。">
-  <title>画像結合ツール - 画像を縦や横につなげる</title>
+  <meta name="description" content="複数の画像を縦や横に結合して、1枚の画像にする無料のWebツールです。登録は不要で、画像はブラウザの中だけで処理し、サーバーには送信しません。">
+  <title>画像結合ツール｜複数の画像を縦・横に結合して1枚に</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="app-header">
     <h1>画像結合ツール</h1>
-    <p class="lead">画像を縦や横につなげて、1枚にまとめます。</p>
+    <p class="lead">複数の画像を縦や横に結合して、1枚の画像にします。</p>
+    <p class="lead">無料・登録不要で使えます。画像はブラウザの中だけで処理し、サーバーには送信しません。</p>
   </header>
 
   <main class="layout">
@@ -19,26 +20,26 @@
         <h2 id="images-heading"><span class="step" aria-hidden="true">1</span>画像を選ぶ</h2>
         <label class="drop-zone" id="drop-zone">
           <input type="file" id="file-input" class="visually-hidden" accept="image/*" multiple>
-          <span class="drop-main">クリックして画像を選ぶ</span>
+          <span class="drop-main">画像を選択</span>
           <span class="drop-sub">またはここにドラッグ＆ドロップ（何枚でも）</span>
         </label>
         <p class="message" id="message" role="status"></p>
-        <ol class="image-list" id="image-list" role="list" aria-label="選んだ画像（つなげる順）"></ol>
+        <ol class="image-list" id="image-list" role="list" aria-label="選んだ画像（結合する順）"></ol>
         <button type="button" class="text-button" id="clear-button" hidden>すべて外す</button>
       </section>
 
       <section class="card" aria-labelledby="settings-heading">
-        <h2 id="settings-heading"><span class="step" aria-hidden="true">2</span>つなげ方を決める</h2>
+        <h2 id="settings-heading"><span class="step" aria-hidden="true">2</span>結合方法を決める</h2>
         <form class="settings" id="settings-form">
           <fieldset>
             <legend>向き</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="direction" value="vertical">縦につなげる</label>
-              <label class="choice"><input type="radio" name="direction" value="horizontal">横につなげる</label>
+              <label class="choice"><input type="radio" name="direction" value="vertical">縦に結合</label>
+              <label class="choice"><input type="radio" name="direction" value="horizontal">横に結合</label>
             </div>
           </fieldset>
           <fieldset>
-            <legend>大きさ</legend>
+            <legend>画像のサイズ</legend>
             <div class="choices">
               <label class="choice"><input type="radio" name="sizeMode" value="fit">そろえる</label>
               <label class="choice"><input type="radio" name="sizeMode" value="original">元のまま</label>
@@ -47,16 +48,16 @@
           </fieldset>
           <div class="field-row">
             <div class="field">
-              <label for="gap">すき間（px）</label>
+              <label for="gap">画像の間の余白（px）</label>
               <input type="number" id="gap" name="gap" min="0" max="500" step="1" inputmode="numeric">
             </div>
             <div class="field">
-              <label for="background">背景の色</label>
+              <label for="background">背景色</label>
               <input type="color" id="background" name="background">
             </div>
           </div>
           <fieldset>
-            <legend>保存する形式</legend>
+            <legend>保存形式</legend>
             <div class="choices">
               <label class="choice"><input type="radio" name="format" value="png">PNG</label>
               <label class="choice"><input type="radio" name="format" value="jpeg">JPEG</label>
@@ -68,10 +69,10 @@
     </div>
 
     <section class="card preview-card" aria-labelledby="preview-heading">
-      <h2 id="preview-heading"><span class="step" aria-hidden="true">3</span>仕上がりを保存する</h2>
+      <h2 id="preview-heading"><span class="step" aria-hidden="true">3</span>結合した画像を保存する</h2>
       <p class="preview-note" id="preview-note"></p>
       <div class="preview-frame" id="preview-frame" hidden>
-        <canvas class="preview" id="preview" role="img" aria-label="仕上がりのプレビュー"></canvas>
+        <canvas class="preview" id="preview" role="img" aria-label="結合した画像のプレビュー"></canvas>
       </div>
       <p class="output-size" id="output-size"></p>
       <button type="button" class="primary-button" id="download-button" disabled>画像を保存</button>
@@ -80,7 +81,6 @@
   </main>
 
   <footer class="app-footer">
-    <p>画像はこの端末のブラウザの中だけで処理し、どこにも送信しません。</p>
     <p><a href="https://github.com/syugo1142/image-joiner">ソースコード（GitHub）</a></p>
   </footer>
 
