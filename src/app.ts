@@ -120,8 +120,24 @@ function changeSettings(app: App, settings: Settings): void {
   if (isSameSettings(app.settings, settings)) {
     return;
   }
+  // 向きが変わると、一覧のチェックボックスの文（前の画像の「右に」か「下に」か）も変わる
+  const directionChanged = settings.direction !== app.settings.direction;
   app.settings = settings;
   saveSettings(settings);
+  if (directionChanged) {
+    update(app);
+    return;
+  }
+  renderPreview(app);
+}
+
+function setBesidePrevious(app: App, id: number, beside: boolean): void {
+  const image = app.images.find((item) => item.id === id);
+  if (!image) {
+    return;
+  }
+  image.besidePrevious = beside;
+  // 一覧は作り直さない（チェックボックスは、もう新しい状態になっている。作り直すと、フォーカスが消える）
   renderPreview(app);
 }
 
@@ -129,9 +145,10 @@ function changeSettings(app: App, settings: Settings): void {
 
 // 状態が変わったら、一覧とプレビューを描き直す
 function update(app: App): void {
-  renderImageList(app.dom.list, app.images, {
+  renderImageList(app.dom.list, app.images, app.settings.direction, {
     move: (id, step) => moveImage(app, id, step),
     remove: (id) => removeImage(app, id),
+    setBesidePrevious: (id, beside) => setBesidePrevious(app, id, beside),
   });
   app.dom.clearButton.hidden = app.images.length === 0;
   renderPreview(app);

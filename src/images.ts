@@ -7,6 +7,9 @@ export type JoinImage = {
   element: HTMLImageElement; // 読み込んだ画像。Canvas に描くときに使う
   width: number; // 画像の幅（px）
   height: number; // 画像の高さ（px）
+  // true なら、前の画像の隣（縦に結合なら右、横に結合なら下）に並べる。一覧のチェックボックスで変える。
+  // 先頭の画像では使わない（並べ替えで先頭に来ても値は残し、また2枚目以降に戻ったら効く）
+  besidePrevious: boolean;
 };
 
 // 次に読み込む画像に付ける番号
@@ -24,7 +27,7 @@ export async function loadImageFile(file: File): Promise<JoinImage> {
     if (width === 0 || height === 0) {
       throw new Error('大きさが分からない画像です');
     }
-    return { id: nextId++, name: file.name, url, element, width, height };
+    return { id: nextId++, name: file.name, url, element, width, height, besidePrevious: false };
   } catch (error) {
     URL.revokeObjectURL(url);
     throw error;

@@ -1,23 +1,37 @@
-// 選んだ画像の一覧（小さな画像・ファイル名・大きさと、並べ替え・外すボタン）を作る
+// 選んだ画像の一覧（小さな画像・ファイル名・大きさと、並べ替え・外すボタン、前の画像の隣に並べるチェックボックス）を作る
 // 一覧は、画像を足したり並べ替えたりするたびに、全部作り直す
 import type { JoinImage } from './images.ts';
+import type { Direction } from './layout.ts';
 import { el, formatNumber } from './util.ts';
 
-// ボタンが押されたときに呼ぶ関数。何をするか（画像の並びを変える）は app.ts が決める
+// ボタンなどが操作されたときに呼ぶ関数。何をするか（画像の並びを変えるなど）は app.ts が決める
 export type ImageListActions = {
   move: (id: number, step: -1 | 1) => void; // step: -1 で1つ前へ、1 で1つ後ろへ
   remove: (id: number) => void;
+  setBesidePrevious: (id: number, beside: boolean) => void; // 前の画像の隣に並べるかを変える
 };
 
 type ButtonAction = 'up' | 'down' | 'remove';
 
-export function renderImageList(list: HTMLOListElement, images: JoinImage[], actions: ImageListActions): void {
-  const items = images.map((image, index) => imageItem(image, index, images.length, actions));
+// direction は、チェックボックスの文（前の画像の「右に」か「下に」か）を決めるために使う
+export function renderImageList(
+  list: HTMLOListElement,
+  images: JoinImage[],
+  direction: Direction,
+  actions: ImageListActions,
+): void {
+  const items = images.map((image, index) => imageItem(image, index, images.length, direction, actions));
   list.replaceChildren(...items);
 }
 
 // 一覧の1行
-function imageItem(image: JoinImage, index: number, count: number, actions: ImageListActions): HTMLLIElement {
+function imageItem(
+  image: JoinImage,
+  index: number,
+  count: number,
+  direction: Direction,
+  actions: ImageListActions,
+): HTMLLIElement {
   const size = `${formatNumber(image.width)} × ${formatNumber(image.height)}`;
   return el('li', { class: 'image-item', 'data-id': image.id }, [
     // ファイル名を横に書くので、画像の説明（alt）は空にする（読み上げで同じ名前を2回読ませないため）
@@ -55,8 +69,23 @@ function imageItem(image: JoinImage, index: number, count: number, actions: Imag
           }),
         ]),
       ]),
+      // 先頭の画像には、隣に並べる「前の画像」がないので出さない
+      index > 0 ? besideToggle(image, direction, actions) : null,
     ]),
   ]);
+}
+
+// 「前の画像の右に並べる」（横に結合のときは「下に」）のチェックボックス
+function besideToggle(image: JoinImage, direction: Direction, actions: ImageListActions): HTMLLabelElement {
+  const text = direction === 'vertical' ? '前の画像の右に並べる' : '前の画像の下に並べる';
+  const checkbox = el('input', {
+    type: 'checkbox',
+    checked: image.besidePrevious,
+    // 見える文はどの行も同じなので、読み上げではファイル名も読む（「外す」ボタンと同じ）
+    'aria-label': `${image.name} を${text}`,
+  });
+  checkbox.addEventListener('change', () => actions.setBesidePrevious(image.id, checkbox.checked));
+  return el('label', { class: 'beside-toggle' }, [checkbox, text]);
 }
 
 // 並べ替えたあと、動かした画像のボタンにフォーカスを戻す（一覧を作り直すとフォーカスが消えるため。

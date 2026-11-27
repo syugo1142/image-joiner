@@ -334,6 +334,25 @@ button:disabled {
   gap: 4px;
 }
 
+/* 「前の画像の右に並べる」のチェックボックス。文の部分を押しても切り替わる（label で囲んでいる） */
+.beside-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* 行の幅いっぱいには広げず、文の幅だけを押せるようにする */
+  justify-self: start;
+  min-height: 32px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.beside-toggle input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
 /* ---------- 2. つなげ方を決める ---------- */
 .settings {
   display: grid;
